@@ -21,12 +21,12 @@
     <parent>
         <groupId>com.redhat.rcm</groupId>
         <artifactId>redhat-releng-tools</artifactId>
-        <version>3</version>
+        <version>7</version>
     </parent>
 
     <groupId>com.redhat.red.build</groupId>
     <artifactId>kojiji</artifactId>
-    <version>2.13-SNAPSHOT</version>
+    <version>2.20-SNAPSHOT</version>
 
     <name>Kojiji</name>
     <description>Koji Java Interface</description>
@@ -41,12 +41,12 @@
 
     <properties>
         <enforcer.skip>true</enforcer.skip>
-        <javaVersion>1.8</javaVersion>
-        <jhttpcVersion>1.6</jhttpcVersion>
-        <rwxVersion>2.3</rwxVersion>
+        <javaVersion>11</javaVersion>
+        <jhttpcVersion>1.20-SNAPSHOT</jhttpcVersion>
+        <rwxVersion>3.0-SNAPSHOT</rwxVersion>
         <httpcVersion>4.4</httpcVersion>
-        <atlasVersion>1.0.0</atlasVersion>
-        <mockitoVersion>2.7.20</mockitoVersion>
+        <atlasVersion>2.0-SNAPSHOT</atlasVersion>
+        <mockitoVersion>2.22.0</mockitoVersion>
         <kerbyVersion>2.0.0</kerbyVersion>
         <metrics.version>4.0.2</metrics.version>
 
@@ -69,7 +69,7 @@
         <docker.container.koji-hub.net.ci-network.ip>localhost</docker.container.koji-hub.net.ci-network.ip>
         <koji-hub-address>${docker.container.koji-hub.ip}</koji-hub-address>
 
-        <plugin.jacoco.version>0.8.3</plugin.jacoco.version>
+        <plugin.jacoco.version>0.8.5</plugin.jacoco.version>
     </properties>
 
     <dependencyManagement>
@@ -77,7 +77,7 @@
             <dependency>
                 <groupId>org.commonjava.boms</groupId>
                 <artifactId>web-commons-bom</artifactId>
-                <version>24</version>
+                <version>30-SNAPSHOT</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -281,7 +281,7 @@
                 <plugin>
                     <groupId>io.fabric8</groupId>
                     <artifactId>docker-maven-plugin</artifactId>
-                    <version>0.15.16</version>
+                    <version>0.31.0</version>
                     <configuration>
                         <images>
                             <image>
@@ -378,7 +378,7 @@ docker.containers.koji-hub.ports.443/tcp.port=${koji-hub-https-port}
                 </plugin>
                 <plugin>
                     <artifactId>maven-failsafe-plugin</artifactId>
-                    <version>2.19</version>
+                    <version>3.0.0-M4</version>
                     <executions>
                         <execution>
                             <id>functional-tests</id>
@@ -402,10 +402,10 @@ docker.containers.koji-hub.ports.443/tcp.port=${koji-hub-https-port}
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.5.1</version>
+                    <version>3.8.1</version>
                     <configuration>
-                        <source>1.8</source>
-                        <target>1.8</target>
+                        <source>${javaVersion}</source>
+                        <target>${javaVersion}</target>
                         <encoding>UTF-8</encoding>
                         <generatedSourcesDirectory>${project.build.directory}/generated-sources/
                         </generatedSourcesDirectory>
@@ -417,6 +417,25 @@ docker.containers.koji-hub.ports.443/tcp.port=${koji-hub-https-port}
                     </configuration>
                 </plugin>
                 <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-javadoc-plugin</artifactId>
+                  <version>3.1.1</version> <executions>
+                    <execution>
+                      <id>attach-javadocs</id>
+                      <goals>
+                        <goal>jar</goal>
+                      </goals>
+                      <configuration>
+                        <detectOfflineLinks>false</detectOfflineLinks>
+                        <additionalparam>-Xdoclint:none</additionalparam>
+                        <additionalOptions>-Xdoclint:none</additionalOptions>
+                        <additionalJOption>-Xdoclint:none</additionalJOption>
+                        <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
+                      </configuration>
+                    </execution>
+                  </executions>
+                </plugin>
+                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-project-info-reports-plugin</artifactId>
                     <version>3.0.0</version>
@@ -424,7 +443,7 @@ docker.containers.koji-hub.ports.443/tcp.port=${koji-hub-https-port}
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
-                    <version>3.7.1</version>
+                    <version>3.8.2</version>
                 </plugin>
             </plugins>
         </pluginManagement>
